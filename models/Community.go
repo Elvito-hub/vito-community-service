@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -20,9 +21,30 @@ type Community struct {
 	SubsribersCount int                  `json:"subsribersCount,omitempty" bson:"subsribersCount,omitempty"`
 }
 
-func GetAllCommunities() ([]Community, error) {
+func (cm Community) Save() (*Community, error) {
+	var communitiesCollection = db.MongoClient.Database("vitocom").Collection("communities")
+	newDoc := bson.M{
+		"name":            cm.Name,
+		"description":     cm.Description,
+		"onApproved":      false,
+		"creator":         cm.Creator,
+		"type":            cm.Type,
+		"subsribersCount": 0,
+		"dateCreated":     primitive.NewDateTimeFromTime(time.Now()),
+	}
 
-	communitiesCollection := db.MongoClient.Database("vitocom").Collection("communities")
+	result, err := communitiesCollection.InsertOne(context.TODO(), newDoc)
+
+	if err != nil {
+		return nil, err
+	}
+	cm.ID = result.InsertedID.(primitive.ObjectID)
+	return &cm, nil
+}
+
+func GetAllCommunities() ([]Community, error) {
+	var communitiesCollection = db.MongoClient.Database("vitocom").Collection("communities")
+
 	// retrieve all the documents that match the filter
 	cursor, err := communitiesCollection.Find(context.TODO(), bson.D{})
 	// check for errors in the finding

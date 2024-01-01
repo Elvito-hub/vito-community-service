@@ -1,0 +1,11 @@
+POST http://localhost:5214/createcommunity
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ODcyMDQxMTdmMDFhNjgyMjczOWRlZiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwNDEwMDQ0Nn0.k8fjum1clUGJR_dMjezyRnk63vfGqjIb1M8cOyBNhxs
+
+{
+    "name":"go community1",
+    "description":"tes go",
+    "type":"test go",
+    "creator":"6557204317f01a6822739def"
+}
+
